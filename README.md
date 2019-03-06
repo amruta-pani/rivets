@@ -10,6 +10,7 @@ npm start //assuming that nodemon is installed globally
 (OR)
 
 npm install
+
 nodemon index.js
 
 Usage:
