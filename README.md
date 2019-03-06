@@ -1,4 +1,5 @@
 This project uses goecode, meta weather and api on water APIs to retrieve the nearby cities and gather weather information for one random nearby city.
+Each module has JSDoc styled comments though the repo does not have the doc files generated.
 
 Before Testing, run:
 
