@@ -72,13 +72,14 @@ let server;
 try {
     server = app.listen(process.env.API_PORT, process.env.HOST, error => {
         if (error) {
+            logger.error('connection error %o', error);
             throw error;
         }
         logger.info('Listening on localhost: %s', process.env.API_PORT);
     });
 } catch (error) {
     logger.error('Error while connecting: %o', error);
-    process.exit(1);
+    // process.exit(1);
 }
 
 
@@ -99,7 +100,7 @@ process.on('SIGINT', () => {
 });
 
 process.on('uncaughtException', exception => {
-    logger.error('uncaught exception received: %o', exception);
+    logger.error('exception: %o', exception);
 });
 
 process.on('unhandledRejection', (reason, p) => {
