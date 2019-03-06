@@ -3,12 +3,13 @@ Each module has JSDoc styled comments though the repo does not have the doc file
 
 Before Testing, run:
 
-npm run setup
+npm run setup //for the first time
+npm start //assuming that nodemon is installed globally
 
 (OR)
 
 npm install
-node index.js
+nodemon index.js
 
 Usage:
 
