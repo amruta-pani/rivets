@@ -3,6 +3,10 @@ Each module has JSDoc styled comments though the repo does not have the doc file
 
 Before Testing, run:
 
+npm run setup
+
+(OR)
+
 npm install
 node index.js
 
