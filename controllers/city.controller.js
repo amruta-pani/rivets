@@ -63,8 +63,14 @@ cityRouter.get('/search', expressjwt(constants.EXPRESS_JWT_OBJECT), async (reque
         logger.info('nearby cities: %o', nearbyCities);
 
         if (nearbyCities.length < 1) {
-            const error = new Error('no cities found in proximity');
-            throw error;
+            response.status(412).send({
+                success: false,
+                error: {
+                    code: 41202,
+                    message: 'No nearby cities found'
+                }
+            });
+            return;
         }
 
         //Out of many nearby cities, picking up one random city
@@ -73,10 +79,14 @@ cityRouter.get('/search', expressjwt(constants.EXPRESS_JWT_OBJECT), async (reque
 
         const weatherForecastResponse = await metaWeather.getWeatherForecast(nearbyCities[randomCityIndex].woeid);
         const onWaterState = await waterState.getOnWaterState(weatherForecastResponse.data.latt_long);
-        weatherForecastResponse.data.onWater = onWaterState;
 
         response.send({
-            weather_forecast_for_nearby_city: weatherForecastResponse.data
+            success: true,
+            result: {
+                weather_forecast_for_nearby_city: Object.assign({}, {
+                    onWater: onWaterState
+                }, weatherForecastResponse.data)
+            }
         });
 
     } catch (error) {
