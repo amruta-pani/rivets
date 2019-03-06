@@ -25,8 +25,6 @@ if (!fs.existsSync(constants.LOGGING_DIR)) {
 }
 
 const tsFormat = () => (new Date()).toISOString();
-// .replace(/T/, ' ')        // replace T with space
-// .replace(/\..+/, '');    // delete the dot and everything after
 
 const logger = createLogger({
     format: combine(

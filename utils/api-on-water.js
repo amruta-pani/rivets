@@ -4,9 +4,7 @@ const axios = require('axios');
 const constants = require('./app.constants');
 
 const apiOnWaterInstance = axios.create({
-    baseURL: constants.API_ON_WATER_BASE_URL,
-    // headers: {
-    // }
+    baseURL: constants.API_ON_WATER_BASE_URL
 });
 
 module.exports = {

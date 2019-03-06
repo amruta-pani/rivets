@@ -2,7 +2,7 @@
  *
  * @module Index
  * @fileOverview Entry point to the application.
- * @description This is the entry point to the application. Application has a MVC architecture and all the controller modules are routed from here and models too including mongodb, redis connections are initialized and established and monitored here. An AppKey is maintained to make sure that any API defined is called from a known environment and calls from anonymous sources are forbidden. This filtering will be eventually moved to webserver level to avoid any DDoS attacks. Base URL: <b>http://localhost:3000/</b> to be appended with each controller node and specific API endpoint. The <i>latest</i> node in the base url always connects to the latest API version and replacing it with an appropriate version would provide access to respective versioned API.
+ * @description This is the entry point to the application. Application has a MVC architecture and all the controller modules are routed from here. Base URL: <b>http://localhost:3000/</b> to be appended with each controller node and specific API endpoint. 
  * @author Hanumanthu Indrakanti <ambika.amruta.pani@gmail.com> 
  * @version 0.1.0
  * @returns {StandardResponse} All APIs return response in a standard format
@@ -18,7 +18,6 @@ const constants = require('./utils/app.constants');
 const logger = require('./utils/logger').winston;
 
 // ----------API Middleware Setup--------------//
-
 
 const app = express();
 
@@ -42,7 +41,7 @@ app.get('/ping', (request, response) => {
 const cityRouter = require('./controllers/city.controller').cityRouter;
 app.use('/city', cityRouter);
 
-// Error routes to be placed at the bottom of routes as the last routes to scan
+// Error routes to be placed at the bottom of routes
 app.use((request, response) => {
     response.status(404).send(constants.ERROR_CODES.RESOURCE_NOT_FOUND);
 });

@@ -4,9 +4,7 @@ const axios = require('axios');
 const constants = require('./app.constants');
 
 const metaWeatherInstance = axios.create({
-    baseURL: constants.META_WEATHER_BASE_URL,
-    // headers: {
-    // }
+    baseURL: constants.META_WEATHER_BASE_URL
 });
 
 module.exports = {

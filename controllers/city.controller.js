@@ -8,7 +8,6 @@ const expressjwt = require('express-jwt');
 const geoCode = require('../utils/geocode');
 const metaWeather = require('../utils/metaweather');
 const waterState = require('../utils/api-on-water');
-const util = require('../utils/util');
 const logger = require('../utils/logger').winston;
 const constants = require('../utils/app.constants');
 
@@ -24,7 +23,7 @@ const cityRouter = express.Router();
  * 
  * @method GET /city/search?q=
  * 
- * @param {String} match retrieves city and other information with matching city name.
+ * @param {String} q retrieves city and other information with matching city name and provides weather info for a random nearby city.
  * 
  * @example GET /city/search?q=Warsaw
  * 
@@ -36,12 +35,10 @@ const cityRouter = express.Router();
  * 
  */
 
-//expressjwt(constants.EXPRESS_JWT_OBJECT),
-
 cityRouter.get('/search', expressjwt(constants.EXPRESS_JWT_OBJECT), async (request, response, next) => {
     try {
         if (!request.query.q || typeof request.query.q !== 'string') {
-            const errorResponse = util.clone(constants.ERROR_CODES.MISSING_MANDATORY_PARAMETERS);
+            const errorResponse = JSON.parse(JSON.stringify(constants.ERROR_CODES.MISSING_MANDATORY_PARAMETERS));
             errorResponse.error.message = 'Start typing a city name';
             if (process.env.NODE_ENV === 'development') {
                 errorResponse.error.stack = 'city name is required in query params with q parameter. Check the API documentation';
@@ -51,6 +48,16 @@ cityRouter.get('/search', expressjwt(constants.EXPRESS_JWT_OBJECT), async (reque
         }
 
         const latLongObject = await geoCode.getLatLong(request.query.q);
+        if (!latLongObject) {
+            response.status(412).send({
+                success: false,
+                error: {
+                    code: 41201,
+                    message: 'Cannot identify the location'
+                }
+            });
+            return;
+        }
         const nearbyCities = await metaWeather.getNearbyCities(latLongObject);
 
         logger.info('nearby cities: %o', nearbyCities);
@@ -85,23 +92,6 @@ cityRouter.get('/search', expressjwt(constants.EXPRESS_JWT_OBJECT), async (reque
  * @property {String} countryCode
  * @property {Double} latitude
  * @property {Double} longitude
- * 
- */
-
-/**
- * @typedef User
- * @property {String} _id
- * @property {String} email
- * @property {String} firstName
- * @property {String} lastName
- * @property {String} city
- * @property {String} phoneNumber
- * @property {String} membershipType
- * @property {String} gender
- * @property {Number} dob
- * @property {Boolean} isAccountVerified
- * @property {Decimal} userRating
- * @property {String[]} [profileImages]
  * 
  */
 

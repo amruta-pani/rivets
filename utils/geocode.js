@@ -4,9 +4,7 @@ const axios = require('axios');
 const constants = require('./app.constants');
 
 const geoCodeInstance = axios.create({
-    baseURL: constants.GEO_CODE_BASE_URL,
-    // headers: {
-    // }
+    baseURL: constants.GEO_CODE_BASE_URL
 });
 
 module.exports = {
